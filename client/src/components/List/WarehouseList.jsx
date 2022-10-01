@@ -1,11 +1,21 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Item } from './Item'
-const handleInventory = () => {
-    console.log("Redirect to Warehous Inventory");
-}
+import { Item } from './index'
+import { useNavigate } from 'react-router-dom'
 
-const Warehouse = ({ warehouse: { warehouseNumber, MAX_CAPACITY, remaining_capacity, items } }) => {
+//name, sku, quantity, category, price, imageURL 
+const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, remaining_capacity, items } }) => {
+    const navigate = useNavigate();
+
+    const handleClick = (items, _id) => {
+        navigate("/inventory", {
+            state: {
+                items: items,
+                warehouse_id: _id
+            }
+        });
+    }
+
     return (
         <>
 
@@ -16,7 +26,7 @@ const Warehouse = ({ warehouse: { warehouseNumber, MAX_CAPACITY, remaining_capac
                 <div>{warehouseNumber}</div>
                 <div>{MAX_CAPACITY}</div>
                 <div>{remaining_capacity}</div>
-                {items.map(item => <Item key={item._id} item={item} />)}
+                <button onClick={() => handleClick(items, _id)}>View</button>
             </div>
         </>
     );

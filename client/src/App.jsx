@@ -1,8 +1,14 @@
-import { WarehouseList } from "./components/List";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Item, WarehouseList, ItemList } from "./components/List";
 export const App = () => {
     return (
-        <>
-            <WarehouseList />
-        </>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/warehouse" element={<WarehouseList />} />
+                <Route path="/inventory" element={<ItemList />} />
+
+            </Routes>
+
+        </BrowserRouter>
     );
 };
