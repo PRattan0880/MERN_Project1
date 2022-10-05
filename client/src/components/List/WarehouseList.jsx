@@ -4,13 +4,13 @@ import { Item } from './index'
 import { useNavigate } from 'react-router-dom'
 
 //name, sku, quantity, category, price, imageURL 
-const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, remaining_capacity, items } }) => {
+const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, remaining_capacity, inventory } }) => {
     const navigate = useNavigate();
 
-    const handleClick = (items, _id) => {
+    const handleClick = (inventory, _id) => {
         navigate("/inventory", {
             state: {
-                items: items,
+                inventory: inventory,
                 warehouse_id: _id
             }
         });
@@ -26,7 +26,7 @@ const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, remaining_
                 <div>{warehouseNumber}</div>
                 <div>{MAX_CAPACITY}</div>
                 <div>{remaining_capacity}</div>
-                <button onClick={() => handleClick(items, _id)}>View</button>
+                <button onClick={() => handleClick(inventory, _id)}>View</button>
             </div>
         </>
     );

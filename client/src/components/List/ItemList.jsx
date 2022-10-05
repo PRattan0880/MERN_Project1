@@ -1,14 +1,19 @@
 import { Item } from './index';
+import { ItemForm } from '../Form/index'
 import { useLocation } from 'react-router-dom';
 import { Grid } from '@mantine/core';
 
 export const ItemList = () => {
     const { state } = useLocation();
     console.log(state);
+    console.log(state.inventory[0].item._id);
     return (
-        <Grid gutter="xs">
-            {/*<div className='cards-container'>*/}{state.items.map(item => <Item key={item._id} item={item} />)}{/*</div>*/}
-        </Grid >
+        <>
+            <Grid gutter="xs">
+                {/*<div className='cards-container'>*/}{state.inventory.map(inventory => <Item key={console.log(inventory.item._id)} item={inventory.item} />)}{/*</div>*/}
+            </Grid >
+            <ItemForm warehouse={state} />
+        </>
 
     );
 }
