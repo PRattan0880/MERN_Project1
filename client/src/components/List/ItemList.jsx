@@ -10,7 +10,7 @@ export const ItemList = () => {
     return (
         <>
             <Grid gutter="xs">
-                {/*<div className='cards-container'>*/}{state.inventory.map(inventory => <Item key={console.log(inventory.item._id)} item={inventory.item} />)}{/*</div>*/}
+                {/*<div className='cards-container'>*/}{state.inventory.map(inventory => <Item key={inventory.item._id} item={inventory.item} />)}{/*</div>*/}
             </Grid >
             <ItemForm warehouse={state} />
         </>

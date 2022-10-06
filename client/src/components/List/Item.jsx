@@ -3,7 +3,7 @@ import { BsFillTrashFill } from "react-icons/bs";
 import { useLocation } from 'react-router-dom';
 
 
-export const Item = ({ item: { name, sku, quantity, category, price, imageURL } }) => {
+export const Item = ({ item: { _id, name, sku, quantity, category, price, imageURL } }) => {
     return (
         <Grid.Col span={3}>
             <Card shadow="sm" p="lg" radius="md" withBorder className='cards-card'>

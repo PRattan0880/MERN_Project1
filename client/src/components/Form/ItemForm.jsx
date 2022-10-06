@@ -1,7 +1,7 @@
 import { Modal, useMantineTheme, NativeSelect, Textarea } from '@mantine/core';
 import { TextInput, Button, Group, NumberInput } from '@mantine/core';
 import { useState } from 'react';
-import { IconCpu } from '@tabler/icons';
+import { IconCpu, IconCurrencyDollar } from '@tabler/icons';
 import axios from 'axios';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,18 +13,16 @@ const schema = yup.object({
     sku: yup.string().required('Product sku is required'),
     quantity: yup.number().positive().integer().required(),
     price: yup.string().matches(/^\d*[\.{1}\d*]\d*$/),
-    // price: yup.number().test("Max Digits", "", value => (value + "").match(/^\d*\.{1}\d*$/)),
-    // price: yup.number().positive().required(),
     category: yup.string().matches(/(GPU|CPU)/).required(),
     imageUrl: yup.string().url().required()
 }).required();
 
-export const ItemForm = (props) => {
+export const ItemForm = ({ warehouse: { warehouse_id, item, MAX_CAPACITY, remaining_capacity, inventory } }) => {
+    console.log(warehouse_id);
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
 
-    // const [selectedOption, setSelectedOption] = useState("");
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
     const options = [{
@@ -36,41 +34,33 @@ export const ItemForm = (props) => {
     },
     ];
 
-    // const options = [
-    //     <option > Please Select Category</option>,
-    //     <option>CPU</option>,
-    //     <option>GPU</option>
-    // ];
-
     const onSubmit = async (data) => {
         setOpened(false);
-        console.log(props.warehouse)
+        console.log(data)
 
         try {
             const res = await axios.post('http://localhost:9000/item', {
                 name: data.name,
                 sku: parseInt(data.sku),
-                // quantity: data.quantity,
                 category: data.category,
                 price: data.price,
                 imageURL: data.imageUrl
             });
-            console.log(res.data.quantity);
-            console.log(props.warehouse_id);
-            const putRest = await axios.put(`http://localhost:9000/inventory/addItem/${props.warehouse.warehouse_id}`, {
-                items: [{
+            console.log(res.data._id);
+            console.log(warehouse_id);
+            const putRest = await axios.put(`http://localhost:9000/inventory/addItem/${warehouse_id}`, {
+
+                item: {
                     _id: res.data._id,
-                    quantity: 10    // WILL FIX IT
-                }]
+                },
+                quantity: data.quantity
+
             });
 
             console.log(putRest.data);
         } catch (err) {
             console.log(err);
         }
-    }
-    const handleChange = () => {
-
     }
 
     return (
@@ -87,9 +77,8 @@ export const ItemForm = (props) => {
                             {...register("name")}
                             error={!!errors.name}
                             size="sm"
-                        // placeholder="84894189"
                         />
-                        {/* <span>{errors.name?.message}</span> */}
+
                         <TextInput
                             withAsterisk
                             label="SKU"
@@ -108,25 +97,13 @@ export const ItemForm = (props) => {
                             error={!!errors.quantity}
                             size="sm"
                         />
-
-                        {/* <div className='custom-select'>
-                            <label className='label-font' htmlFor='category-select'>Category</label>
-                            <span className="mantine-u5apz8 mantine-InputWrapper-required mantine-TextInput-required" aria-hidden="true"> *</span>
-                            <select id='category-select' {...register('category')}  >
-                                {options}
-                                {!!errors.category}
-                            </select>
-                        </div> */}
-
                         <NativeSelect
                             label="Choose Component Type"
                             {...register('category')}
-                            // onChange={e => console.log(e.currentTarget.value)}
                             data={options}
                             icon={<IconCpu size={14} />}
                             error={!!errors.category}
                             size="sm"
-
                         />
                     </Group>
                     <TextInput
@@ -137,6 +114,7 @@ export const ItemForm = (props) => {
                         {...register("price")}
                         error={!!errors.price}
                         size="sm"
+                        icon={<IconCurrencyDollar size={14} />}
                     />
                     <Textarea
                         placeholder="Image URL"

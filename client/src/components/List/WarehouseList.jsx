@@ -10,6 +10,8 @@ const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, remaining_
     const handleClick = (inventory, _id) => {
         navigate("/inventory", {
             state: {
+                MAX_CAPACITY: MAX_CAPACITY,
+                remaining_capacity: remaining_capacity,
                 inventory: inventory,
                 warehouse_id: _id
             }
