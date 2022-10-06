@@ -1,38 +1,39 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Item } from './index'
+import { Warehouse, Item } from './index'
 import { useNavigate } from 'react-router-dom'
+import { Card, Grid, Image, Text, Badge, Button, Group } from '@mantine/core';
 
 //name, sku, quantity, category, price, imageURL 
-const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, remaining_capacity, inventory } }) => {
-    const navigate = useNavigate();
+// const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, remaining_capacity, inventory } }) => {
+//     const navigate = useNavigate();
 
-    const handleClick = (inventory, _id) => {
-        navigate("/inventory", {
-            state: {
-                MAX_CAPACITY: MAX_CAPACITY,
-                remaining_capacity: remaining_capacity,
-                inventory: inventory,
-                warehouse_id: _id
-            }
-        });
-    }
+//     const handleClick = (inventory, _id) => {
+//         navigate("/inventory", {
+//             state: {
+//                 MAX_CAPACITY: MAX_CAPACITY,
+//                 remaining_capacity: remaining_capacity,
+//                 inventory: inventory,
+//                 warehouse_id: _id
+//             }
+//         });
+//     }
 
-    return (
-        <>
+//     return (
+//         <>
 
-            <div className='image-box'>
+//             <div className='image-box'>
 
-            </div>
-            <div>
-                <div>{warehouseNumber}</div>
-                <div>{MAX_CAPACITY}</div>
-                <div>{remaining_capacity}</div>
-                <button onClick={() => handleClick(inventory, _id)}>View</button>
-            </div>
-        </>
-    );
-}
+//             </div>
+//             <div>
+//                 <div>{warehouseNumber}</div>
+//                 <div>{MAX_CAPACITY}</div>
+//                 <div>{remaining_capacity}</div>
+//                 <button onClick={() => handleClick(inventory, _id)}>View</button>
+//             </div>
+//         </>
+//     );
+// }
 
 export const WarehouseList = () => {
 
@@ -45,9 +46,11 @@ export const WarehouseList = () => {
     }, []);
 
     return (
-        <div className='container'>
+        // <div className='container'>
+        <Grid>
             {warehouseList.map(warehouse => <Warehouse key={warehouse._id} warehouse={warehouse} />)}
-        </div>
+        </Grid>
+        // </div>
     );
 
 };  

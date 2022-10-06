@@ -8,16 +8,32 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import Form from 'react-bootstrap/Form';
 
-const schema = yup.object({
-    name: yup.string().required('Product name is required'),
-    sku: yup.string().required('Product sku is required'),
-    quantity: yup.number().positive().integer().required(),
-    price: yup.string().matches(/^\d*[\.{1}\d*]\d*$/),
-    category: yup.string().matches(/(GPU|CPU)/).required(),
-    imageUrl: yup.string().url().required()
-}).required();
+
 
 export const ItemForm = ({ warehouse: { warehouse_id, item, MAX_CAPACITY, remaining_capacity, inventory } }) => {
+
+    const schema = yup.object({
+        name: yup.string().required('Product name is required'),
+        sku: yup.string().required('Product sku is required'),
+        quantity: yup.number().test("is-threshold-valid", "${path} threshold invalid", function (quantity) {
+            console.log(quantity)
+            const isInRange = 0;
+            if (remaining_capacity - quantity < 0) {
+                console.log("invalid capa");
+
+                return this.createError({
+                    message: "Not Enough Capacity in Warehouse"
+                })
+            } else {
+                return quantity;
+            }
+        }),
+        // quantity: yup.number().positive().integer().required(),
+        price: yup.string().matches(/^\d*[\.{1}\d*]\d*$/),
+        category: yup.string().matches(/(GPU|CPU|Motherboard)/).required(),
+        imageUrl: yup.string().url().required()
+    }).required();
+
     console.log(warehouse_id);
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
@@ -32,6 +48,10 @@ export const ItemForm = ({ warehouse: { warehouse_id, item, MAX_CAPACITY, remain
         label: 'CPU',
         value: 'CPU'
     },
+    {
+        label: 'Motherboard',
+        value: 'Motherboard'
+    }
     ];
 
     const onSubmit = async (data) => {
