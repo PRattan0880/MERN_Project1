@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const itemSchema = new Schema({
     sku: Number,
     name: String,
-    quantity: Number,
+    // quantity: Number,
     category: String,
     price: Number,
     imageURL: String
@@ -32,6 +32,9 @@ const itemSchema = new Schema({
     //     quantity: Number,
     //     imageURL: String
     // }]
+}, {
+    toJson: { virtual: true },
+    toObject: { virtual: true }
 });
 
 const Item = mongoose.model('Item', itemSchema, 'Item');

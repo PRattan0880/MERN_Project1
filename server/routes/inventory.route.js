@@ -2,7 +2,8 @@
 
 const router = require('express').Router();
 const { default: mongoose } = require('mongoose');
-const { findAllInventory, findInventoryById, createInventory, updateInventory } = require('../controller/inventory.controller.js');
+const { findAllInventory, findInventoryById, createInventory, updateInventory, insertToInventory } = require('../controller/inventory.controller.js');
+const Inventory = require('../models/Inventory.model.js');
 
 const validateObjectId = (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -57,6 +58,17 @@ router.put('/:id', validateObjectId, async (req, res) => {
     }
 });
 
+router.put('/addItem/:id', validateObjectId, async (req, res) => {
+    // console.log(req.body);
+
+    try {
+        const inventory = await insertToInventory(req.params.id, req.body);
+        // console.log(inventory);
+        res.send();
+    } catch (err) {
+        res.status(err?.status ?? 500).json(err);
+    }
+});
 
 
 
