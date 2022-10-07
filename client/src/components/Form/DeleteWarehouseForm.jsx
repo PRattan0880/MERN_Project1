@@ -1,6 +1,5 @@
-import { Modal, useMantineTheme, NativeSelect, Textarea, Text } from '@mantine/core';
+import { Modal, useMantineTheme, NativeSelect, Textarea, Center, Text } from '@mantine/core';
 import { TextInput, Button, Group, NumberInput } from '@mantine/core';
-import { openConfirmModal } from '@mantine/modals';
 import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { IconCpu, IconCurrencyDollar } from '@tabler/icons';
@@ -8,21 +7,21 @@ import axios from 'axios';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+
 import Form from 'react-bootstrap/Form';
 
-export const DeleteItemForm = ({ opened, setOpened, _id, quantity }) => {
+export const DeleteWarehouseForm = ({ opened, setOpened, warehouse_id }) => {
 
 
     const { state } = useLocation();
     const theme = useMantineTheme();
-    const handleDelete = async (_id) => {
+
+    console.log()
+
+    const handleDelete = async (warehouse_id) => {
         setOpened(false);
         try {
-            const putRest = await axios.delete(`http://localhost:9000/inventory/${state.warehouse_id}/removeItem/${_id}`, {
-                data: {
-                    quantity: quantity
-                }
-            });
+            await axios.delete(`http://localhost:9000/inventory/${warehouse_id}`);
         } catch (err) {
             console.log(err);
         }
@@ -38,7 +37,8 @@ export const DeleteItemForm = ({ opened, setOpened, _id, quantity }) => {
                     <Text size="sm">
                         Are you sure you want to delete this item? This action is permanent.
                     </Text>
-                    <Button color="red" onClick={() => { handleDelete(_id) }}>Yes</Button>
+
+                    <Button color="red" onClick={() => { handleDelete(warehouse_id) }}>Yes</Button>
                     <Button onClick={() => setOpened(false)}>No</Button>
                 </Group>
             </Modal>

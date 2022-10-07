@@ -1,34 +1,37 @@
 import { Card, Grid, Image, Text, Badge, Button, Group } from '@mantine/core';
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 import { useLocation } from 'react-router-dom';
-import { DeleteItemForm } from '../Form/DeleteItemForm';
+import { DeleteItemForm, ItemEditForm } from '../Form/index.js';
 import { useState } from 'react';
 import { Modal, useMantineTheme, NativeSelect, Textarea } from '@mantine/core';
 
-const handleEdit = () => {
-
-}
-
-
-
-export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quantity }) => {
-    // const { state } = useLocation();
+export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quantity, warehouse_id, remaining_capacity }) => {
 
     const [opened, setOpened] = useState(false);
+    const [editOpened, setEditOpened] = useState(false);
     const theme = useMantineTheme();
-    console.log(`Quanityty in Item Component ${quantity}`)
-    const props = {
+
+    const deleteProps = {
         setOpened: setOpened,
         opened: opened,
-        _id: _id
-    }
-
-    const handleDelete = () => {
-
-        setOpened(true);
+        _id: _id,
+        quantity: quantity,
 
     }
+    const editProps = {
+        setEditOpened: setEditOpened,
+        editOpened: editOpened,
+        _id: _id,
+        name: name,
+        sku: sku,
+        category: category,
+        price: price,
+        quantity: quantity,
+        warehouse_id: warehouse_id,
+        remaining_capacity: remaining_capacity
+    }
 
+    console.log(remaining_capacity)
     return (
         <Grid.Col span={3}>
             <Card shadow="sm" p="lg" radius="md" withBorder className='cards-card'>
@@ -46,19 +49,20 @@ export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quan
 
                 <div className='cards-button-container'>
                     <div className='cards-button'>
-                        <Button onClick={() => handleEdit()} variant="light" color="blue" mt="md" radius="md">
+                        <Button onClick={() => setEditOpened(true)} variant="light" color="blue" mt="md" radius="md">
                             <BsFillPencilFill />
                         </Button>
                     </div>
                     <div className='cards-button'>
-                        <Button onClick={() => setOpened(true)/*handleDelete(_id, opened, setOpened, theme)*/} variant="light" color="blue" mt="md" radius="md">
+                        <Button onClick={() => setOpened(true)} variant="light" color="red" mt="md" radius="md">
                             <BsFillTrashFill />
 
                         </Button>
                     </div>
                 </div>
             </Card>
-            <DeleteItemForm {...props} />
+            <ItemEditForm {...editProps} />
+            <DeleteItemForm {...deleteProps} />
         </Grid.Col>
     );
 }

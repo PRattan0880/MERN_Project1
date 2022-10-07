@@ -10,14 +10,11 @@ import Form from 'react-bootstrap/Form';
 
 
 
-export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, inventory } }) => {
+export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, category, price, imageURL, quantity, warehouse_id, remaining_capacity }) => {
 
     const schema = yup.object({
         name: yup.string().required('Product name is required'),
-        sku: yup.string().required('Product sku is required'),
         quantity: yup.number().test("is-threshold-valid", "${path} threshold invalid", function (quantity) {
-            console.log(quantity)
-            const isInRange = 0;
             if (remaining_capacity - quantity < 0) {
                 return this.createError({
                     message: "Not Enough Capacity in Warehouse"
@@ -28,8 +25,6 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
         }),
         // quantity: yup.number().positive().integer().required(),
         price: yup.string().matches(/^\d*[\.{1}\d*]\d*$/),
-        category: yup.string().matches(/(GPU|CPU|Motherboard)/).required(),
-        imageUrl: yup.string().url().required()
     }).required();
 
     // console.log(MAX_CAPACITY);
@@ -38,7 +33,6 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
     });
 
     const theme = useMantineTheme();
-    const [opened, setOpened] = useState(false);
     const options = [{
         label: 'GPU',
         value: 'GPU'
@@ -53,56 +47,67 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
     ];
 
     const onSubmit = async (data) => {
-        setOpened(false);
+        setEditOpened(false);
         console.log(data)
+        console.log(quantity)
 
         try {
-            const res = await axios.post('http://localhost:9000/item', {
+
+            const res = await axios.put(`http://localhost:9000/item/${_id}`, {
                 name: data.name,
-                sku: parseInt(data.sku),
+                sku: data.sku,
                 category: data.category,
                 price: data.price,
-                imageURL: data.imageUrl
+                imageURL: imageURL
             });
-            console.log(res.data._id);
-            const putRest = await axios.put(`http://localhost:9000/inventory/addItem/${_id}`, {
 
+            //console.log(res)
+            const putRes = await axios.put(`http://localhost:9000/inventory/updateItem/${warehouse_id}`, {
                 item: {
-                    _id: res.data._id,
+                    _id: _id,
+                    name: data.name,
+                    sku: data.sku,
+                    category: data.category,
+                    price: data.price,
+                    imageURL: imageURL
                 },
-                quantity: data.quantity
-
+                quantity: data.quantity,
+                addOrMinus: quantity - data.quantity
             });
-
-            console.log(putRest.data);
+            console.log(putRes.data)
         } catch (err) {
             console.log(err);
         }
     }
 
+    console.log(remaining_capacity)
     return (
 
         <>
             <Modal overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
                 overlayOpacity={0.55}
-                overlayBlur={3} opened={opened} onClose={() => setOpened(false)} centered>
+                overlayBlur={3} opened={editOpened} onClose={() => setEditOpened(false)} centered>
                 <form>
                     <Group>
                         <TextInput
                             withAsterisk
                             label="Item Name"
                             {...register("name")}
+                            defaultValue={name}
                             error={!!errors.name}
                             size="sm"
                         />
 
                         <TextInput
+                            defaultValue={sku}
                             withAsterisk
                             label="SKU"
                             placeholder="84894189"
-                            {...register("sku")}
-                            error={!!errors.sku}
+                            // error={!!errors.sku}
+                            {...register("sku", { value: sku })}
                             size="sm"
+                            disabled
+
                         />
                     </Group>
                     <Group>
@@ -116,11 +121,12 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
                         />
                         <NativeSelect
                             label="Choose Component Type"
-                            {...register('category')}
                             data={options}
                             icon={<IconCpu size={14} />}
-                            error={!!errors.category}
+                            {...register("category", { value: category })}
+                            // error={!!errors.category}
                             size="sm"
+                            disabled
                         />
                     </Group>
                     <TextInput
@@ -133,20 +139,12 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
                         size="sm"
                         icon={<IconCurrencyDollar size={14} />}
                     />
-                    <Textarea
-                        placeholder="Image URL"
-                        label="Image URL"
-                        withAsterisk
-                        {...register("imageUrl")}
-                        error={!!errors.imageUrl}
-                    />
 
                     <Group position="right" mt="md">
                         <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
                     </Group>
                 </form>
             </Modal>
-            <Center><Button leftIcon={<IconCirclePlus size={15} />} onClick={() => setOpened(!opened)}>Create</Button></Center>
             {/* <button onClick={() => setOpened(!opened)}>Test</button> */}
         </>
     );
