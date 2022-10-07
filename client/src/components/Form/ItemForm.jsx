@@ -10,7 +10,7 @@ import Form from 'react-bootstrap/Form';
 
 
 
-export const ItemForm = ({ warehouse: { warehouse_id, item, MAX_CAPACITY, remaining_capacity, inventory } }) => {
+export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, inventory } }) => {
 
     const schema = yup.object({
         name: yup.string().required('Product name is required'),
@@ -34,7 +34,7 @@ export const ItemForm = ({ warehouse: { warehouse_id, item, MAX_CAPACITY, remain
         imageUrl: yup.string().url().required()
     }).required();
 
-    console.log(warehouse_id);
+    console.log(MAX_CAPACITY);
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
@@ -67,8 +67,8 @@ export const ItemForm = ({ warehouse: { warehouse_id, item, MAX_CAPACITY, remain
                 imageURL: data.imageUrl
             });
             console.log(res.data._id);
-            console.log(warehouse_id);
-            const putRest = await axios.put(`http://localhost:9000/inventory/addItem/${warehouse_id}`, {
+            // console.log(warehouse_id);
+            const putRest = await axios.put(`http://localhost:9000/inventory/addItem/${_id}`, {
 
                 item: {
                     _id: res.data._id,

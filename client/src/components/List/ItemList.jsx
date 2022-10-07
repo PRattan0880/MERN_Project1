@@ -1,18 +1,57 @@
-import { Item } from './index';
+import { Item, WarehouseList } from './index';
 import { ItemForm } from '../Form/index'
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Grid } from '@mantine/core';
 
 export const ItemList = () => {
-    const { state } = useLocation();
-    console.log(state);
-    console.log(state.inventory[0].item._id);
+    // const { state } = useLocation();
+    const [warehouse, setWarehouseList] = useState([])
+    const [inventoryList, setInventoryList] = useState([]);
+    //console.log(state);
+    // console.log(state.inventory[0].item._id);
+
+    useEffect(() => {
+        axios.get('http://localhost:9000/inventory/633cd3cf7666074ffd2ba88d')
+            .then(res => { setInventoryList(res.data.inventory); setWarehouseList(res.data); console.log(res.data) })
+            .catch(err => console.error(err));
+    }, []);
+
+    console.log(warehouse)
     return (
         <>
-            <Grid gutter="xs">
-                {/*<div className='cards-container'>*/}{state.inventory.map(inventory => <Item key={inventory.item._id} item={inventory.item} />)}{/*</div>*/}
+
+            < Grid gutter="xs">
+                {inventoryList.map(inventory => {
+                    const props = {
+                        item: inventory.item,
+                        quantity: inventory.quantity
+                    }
+                    console.log(inventory)
+                    return <Item key={inventory.item._id} {...props} />
+                })};
+                {/* {inventoryList.inventory.map(test => {
+                    console.log(test)
+                })} */}
+                {/* {inventoryList.inventory.map(inventory => {
+                    const props = {
+                        item: inventory.item,
+                        quantity: inventory.quantity
+                    }
+                    console.log(props)
+                    return < Item key={inventory.item._id} {...props} />
+                })}; */}
+                {/* {state.inventory.map(inventory => {
+                    const props = {
+                        item: inventory.item,
+                        quantity: inventory.quantity
+                    }
+                    console.log(props)
+                    return < Item key={inventory.item._id} {...props} />
+                })};*/}
             </Grid >
-            <ItemForm warehouse={state} />
+            <ItemForm warehouse={warehouse} />
         </>
 
     );

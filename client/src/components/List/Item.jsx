@@ -11,16 +11,20 @@ const handleEdit = () => {
 
 
 
-export const Item = ({ item: { _id, name, sku, quantity, category, price, imageURL } }) => {
+export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quantity }) => {
+    // const { state } = useLocation();
+
     const [opened, setOpened] = useState(false);
     const theme = useMantineTheme();
-
+    console.log(`Quanityty in Item Component ${quantity}`)
     const props = {
         setOpened: setOpened,
-        opened: opened
+        opened: opened,
+        _id: _id
     }
-    const handleDelete = (_id) => {
-        console.log(_id);
+
+    const handleDelete = () => {
+
         setOpened(true);
 
     }
@@ -47,7 +51,7 @@ export const Item = ({ item: { _id, name, sku, quantity, category, price, imageU
                         </Button>
                     </div>
                     <div className='cards-button'>
-                        <Button onClick={() => handleDelete(_id, opened, setOpened, theme)} variant="light" color="blue" mt="md" radius="md">
+                        <Button onClick={() => setOpened(true)/*handleDelete(_id, opened, setOpened, theme)*/} variant="light" color="blue" mt="md" radius="md">
                             <BsFillTrashFill />
 
                         </Button>
