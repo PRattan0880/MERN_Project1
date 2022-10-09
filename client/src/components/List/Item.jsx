@@ -1,15 +1,30 @@
 import { Card, Grid, Image, Text, Badge, Button, Group } from '@mantine/core';
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
-import { useLocation } from 'react-router-dom';
 import { DeleteItemForm, ItemEditForm } from '../Form/index.js';
 import { useState } from 'react';
-import { Modal, useMantineTheme, NativeSelect, Textarea } from '@mantine/core';
 
+/**
+ * Component for showing form in modal allowing user to edit item data and update the item state in 
+ * order to rerender the component
+ * 
+ * @property {string}              _id                  - MongoDB _id for item document 
+ * @property {string}              name                 - name of the item document 
+ * @property {string}              sku                  - unique sku number of item document
+ * @property {string}              category             - Category of item document
+ * @property {number}              price                - Current price of given item document
+ * @property {string}              imageURL             - holds url for image of each item document
+ * @property {number}              quantity             - Current quantity of given item in inventory
+ * @property {string}              warehouse_id         - MongoDB _id for warehouse document
+ * @property {number}              remaining_capacity   - Current remaining capacity in warehouse document
+* @property {Array.Objects}        inventoryList        - array of item documents/objects
+ * @property {React.Dispatch}      setInventoryList     - useState setter function used to update state of inventory list 
+ * 
+ * @returns {React.Component} Rendered Modal with fields to update name, price and quantity of item in inventory
+ */
 export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quantity, warehouse_id, remaining_capacity, inventoryList, setInventoryList }) => {
 
     const [opened, setOpened] = useState(false);
     const [editOpened, setEditOpened] = useState(false);
-    const theme = useMantineTheme();
 
     const deleteProps = {
         setOpened: setOpened,
@@ -20,6 +35,7 @@ export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quan
         setInventoryList: setInventoryList
 
     }
+
     const editProps = {
         setEditOpened: setEditOpened,
         editOpened: editOpened,
