@@ -20,7 +20,7 @@ export const ItemList = () => {
      */
     useEffect(() => {
         axios.get(`http://localhost:9000/inventory/${state.warehouse_id}`)
-            .then(res => setInventoryList(res.data.inventory))
+            .then(res => { setInventoryList(res.data.inventory); setWarehouseList(res.data) })
             .catch(err => console.error(err));
     }, []);
 
@@ -30,6 +30,7 @@ export const ItemList = () => {
         setInventoryList: setInventoryList
     }
 
+    console.log(inventoryList)
     return (
         <>
             <Grid gutter="xs">

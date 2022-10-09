@@ -27,7 +27,7 @@ export const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, rem
      * Use navigate hook to navigate to inventory page with state
      * @param {string} _id     MongoDB _id for warehouse document 
      */
-    const handleClick = (_id) => {
+    const handleClick = (inventory, _id) => {
         navigate("/inventory", {
             state: {
                 warehouse_id: _id,
@@ -61,7 +61,7 @@ export const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, rem
 
                     <div className='cards-button-container'>
                         <div className='cards-button'>
-                            <Button onClick={() => handleClick(_id)} variant="light" color="blue" mt="md" radius="md">
+                            <Button onClick={() => handleClick(inventory, _id)} variant="light" color="blue" mt="md" radius="md">
                                 <BsEyeFill />
                             </Button>
                         </div>

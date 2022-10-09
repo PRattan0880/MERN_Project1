@@ -82,4 +82,3 @@ export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quan
         </Grid.Col>
     );
 }
-// 
