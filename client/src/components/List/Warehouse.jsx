@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { BsFillTrashFill } from "react-icons/bs";
 import { Modal, useMantineTheme, NativeSelect, Textarea } from '@mantine/core';
 
-export const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, remaining_capacity, inventory, imageURL } }) => {
+export const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, remaining_capacity, inventory, imageURL }, warehouseList, setWarehouseList }) => {
     const [opened, setOpened] = useState(false);
     const navigate = useNavigate();
     const handleClick = (inventory, _id) => {
@@ -22,7 +22,9 @@ export const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, rem
     const props = {
         setOpened: setOpened,
         opened: opened,
-        warehouse_id: _id
+        warehouse_id: _id,
+        warehouseList: warehouseList,
+        setWarehouseList: setWarehouseList
     }
 
     console.log(props)

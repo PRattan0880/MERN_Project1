@@ -9,7 +9,7 @@ import * as yup from "yup";
 import Form from 'react-bootstrap/Form';
 
 
-export const WarehouseForm = () => {
+export const WarehouseForm = ({ warehouseList, setWarehouseList }) => {
     const schema = yup.object({
         warehouseNumber: yup.number().positive().required(),
         max_capacity: yup.number().positive().required(),
@@ -34,6 +34,11 @@ export const WarehouseForm = () => {
                 imageURL: data.imageUrl,
                 inventory: []
             });
+
+            axios.get('http://localhost:9000/inventory')
+                .then(res => { setWarehouseList(res.data); console.log(res.data) })
+                .catch(err => console.error(err));
+            console.log(res)
         } catch (err) {
             console.log(err);
         }

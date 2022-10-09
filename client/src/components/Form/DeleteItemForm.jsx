@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import Form from 'react-bootstrap/Form';
 
-export const DeleteItemForm = ({ opened, setOpened, _id, quantity }) => {
+export const DeleteItemForm = ({ opened, setOpened, _id, quantity, inventoryList, setInventoryList }) => {
 
 
     const { state } = useLocation();
@@ -23,6 +23,11 @@ export const DeleteItemForm = ({ opened, setOpened, _id, quantity }) => {
                     quantity: quantity
                 }
             });
+
+            await axios.get(`http://localhost:9000/inventory/${state.warehouse_id}`)
+                .then(res => { setInventoryList(res.data.inventory); console.log(res.data) })
+                .catch(err => console.error(err));
+
         } catch (err) {
             console.log(err);
         }

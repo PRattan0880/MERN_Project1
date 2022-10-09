@@ -15,12 +15,26 @@ export const WarehouseList = () => {
             .catch(err => console.error(err));
     }, []);
 
+
+    const props = {
+        warehouseList: warehouseList,
+        setWarehouseList: setWarehouseList
+    };
+
     return (
         <>
             <Grid>
-                {warehouseList.map(warehouse => <Warehouse key={warehouse._id} warehouse={warehouse} />)}
+                {warehouseList.map(warehouse => {
+                    const warehouseProps = {
+                        warehouse: warehouse,
+                        warehouseList: warehouseList,
+                        setWarehouseList: setWarehouseList
+                    }
+                    return <Warehouse key={warehouse._id} {...warehouseProps} />
+                }
+                )}
             </Grid>
-            <WarehouseForm />
+            <WarehouseForm {...props} />
         </>
     );
 

@@ -5,7 +5,7 @@ import { DeleteItemForm, ItemEditForm } from '../Form/index.js';
 import { useState } from 'react';
 import { Modal, useMantineTheme, NativeSelect, Textarea } from '@mantine/core';
 
-export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quantity, warehouse_id, remaining_capacity }) => {
+export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quantity, warehouse_id, remaining_capacity, inventoryList, setInventoryList }) => {
 
     const [opened, setOpened] = useState(false);
     const [editOpened, setEditOpened] = useState(false);
@@ -16,6 +16,8 @@ export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quan
         opened: opened,
         _id: _id,
         quantity: quantity,
+        inventoryList: inventoryList,
+        setInventoryList: setInventoryList
 
     }
     const editProps = {
@@ -28,7 +30,9 @@ export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quan
         price: price,
         quantity: quantity,
         warehouse_id: warehouse_id,
-        remaining_capacity: remaining_capacity
+        remaining_capacity: remaining_capacity,
+        inventoryList: inventoryList,
+        setInventoryList: setInventoryList
     }
 
     console.log(remaining_capacity)

@@ -10,7 +10,7 @@ import * as yup from "yup";
 
 import Form from 'react-bootstrap/Form';
 
-export const DeleteWarehouseForm = ({ opened, setOpened, warehouse_id }) => {
+export const DeleteWarehouseForm = ({ opened, setOpened, warehouse_id, warehouseList, setWarehouseList }) => {
 
 
     const { state } = useLocation();
@@ -22,6 +22,9 @@ export const DeleteWarehouseForm = ({ opened, setOpened, warehouse_id }) => {
         setOpened(false);
         try {
             await axios.delete(`http://localhost:9000/inventory/${warehouse_id}`);
+            await axios.get('http://localhost:9000/inventory')
+                .then(res => { setWarehouseList(res.data); console.log(res.data) })
+                .catch(err => console.error(err));
         } catch (err) {
             console.log(err);
         }

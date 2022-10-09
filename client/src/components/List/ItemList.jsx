@@ -18,9 +18,14 @@ export const ItemList = () => {
             .catch(err => console.error(err));
     }, []);
 
-    console.log(warehouse)
-    console.log(state.warehouse_id)
-    console.log(state)
+    const warehouseProps = {
+        warehouse: warehouse,
+        inventoryList: inventoryList,
+        setInventoryList: setInventoryList
+    }
+    // console.log(warehouse)
+    // console.log(state.warehouse_id)
+    // console.log(state)
     return (
         <>
 
@@ -30,7 +35,9 @@ export const ItemList = () => {
                         item: inventory.item,
                         quantity: inventory.quantity,
                         warehouse_id: state.warehouse_id,
-                        remaining_capacity: state.remaining_capacity
+                        remaining_capacity: state.remaining_capacity,
+                        inventoryList: inventoryList,
+                        setInventoryList: setInventoryList
                     }
 
                     return <Item key={inventory.item._id} {...props} />
@@ -55,7 +62,7 @@ export const ItemList = () => {
                     return < Item key={inventory.item._id} {...props} />
                 })};*/}
             </Grid >
-            <ItemForm warehouse={warehouse} />
+            <ItemForm {...warehouseProps} />
         </>
 
     );

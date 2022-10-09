@@ -10,14 +10,14 @@ import Form from 'react-bootstrap/Form';
 
 
 
-export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, inventory } }) => {
+export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, inventory }, inventoryList, setInventoryList }) => {
 
     const schema = yup.object({
         name: yup.string().required('Product name is required'),
         sku: yup.string().required('Product sku is required'),
         quantity: yup.number().test("is-threshold-valid", "${path} threshold invalid", function (quantity) {
             console.log(quantity)
-            const isInRange = 0;
+            // const isInRange = 0;
             if (remaining_capacity - quantity < 0) {
                 return this.createError({
                     message: "Not Enough Capacity in Warehouse"
@@ -73,6 +73,10 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
                 quantity: data.quantity
 
             });
+
+            await axios.get(`http://localhost:9000/inventory/${_id}`)
+                .then(res => { setInventoryList(res.data.inventory); console.log(res.data) })
+                .catch(err => console.error(err));
 
             console.log(putRest.data);
         } catch (err) {
@@ -147,7 +151,6 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
                 </form>
             </Modal>
             <Center><Button leftIcon={<IconCirclePlus size={15} />} onClick={() => setOpened(!opened)}>Create</Button></Center>
-            {/* <button onClick={() => setOpened(!opened)}>Test</button> */}
         </>
     );
 

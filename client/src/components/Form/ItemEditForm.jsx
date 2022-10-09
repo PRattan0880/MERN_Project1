@@ -9,8 +9,12 @@ import * as yup from "yup";
 import Form from 'react-bootstrap/Form';
 
 
-
-export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, category, price, imageURL, quantity, warehouse_id, remaining_capacity }) => {
+/**
+ * 
+ * @param {*} param0 
+ * @returns 
+ */
+export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, category, price, imageURL, quantity, warehouse_id, remaining_capacity, inventoryList, setInventoryList }) => {
 
     const schema = yup.object({
         name: yup.string().required('Product name is required'),
@@ -61,7 +65,6 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                 imageURL: imageURL
             });
 
-            //console.log(res)
             const putRes = await axios.put(`http://localhost:9000/inventory/updateItem/${warehouse_id}`, {
                 item: {
                     _id: _id,
@@ -74,6 +77,12 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                 quantity: data.quantity,
                 addOrMinus: quantity - data.quantity
             });
+
+            console.log(_id)
+            await axios.get(`http://localhost:9000/inventory/${warehouse_id}`)
+                .then(res => { setInventoryList(res.data.inventory); console.log(res.data) })
+                .catch(err => console.error(err));
+
             console.log(putRes.data)
         } catch (err) {
             console.log(err);
@@ -112,10 +121,12 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                     </Group>
                     <Group>
                         <NumberInput
+
                             withAsterisk
                             label="Quantity"
                             placeholder="1"
                             {...register("quantity")}
+                            defaultValue={quantity}
                             error={!!errors.quantity}
                             size="sm"
                         />
@@ -130,6 +141,7 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                         />
                     </Group>
                     <TextInput
+                        defaultValue={price}
                         withAsterisk
                         label="Price"
                         placeholder="100.00"
