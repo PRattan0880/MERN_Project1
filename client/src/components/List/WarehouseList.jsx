@@ -5,7 +5,7 @@ import { Grid } from '@mantine/core';
 import { WarehouseForm } from '../Form/WarehouseForm';
 
 /**
- * @returns Rendered Grid component showing list of cards containg item data with image, Warehouse Number, Max Capacity and remaining capacity
+ * @returns Rendered Grid component showing list of cards containg warehouse data with image, Warehouse Number, Max Capacity and remaining capacity
  */
 export const WarehouseList = () => {
 
