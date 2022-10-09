@@ -1,5 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Item, WarehouseList, ItemList } from "./components/List";
+import { WarehouseList, ItemList } from "./components/List";
+
+/**
+ * @returns Rendered BrowserRouter allowing navigation to different SPA components
+ */
 export const App = () => {
     return (
         <BrowserRouter>
