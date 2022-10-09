@@ -82,7 +82,7 @@ router.post('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         await removeItemById(req.params.id);
-        res.send(200)
+        res.sendStatus(200)
     } catch (err) {
         res.status(err?.status ?? 500).json(err);
     }
