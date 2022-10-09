@@ -10,8 +10,10 @@ app.use(express.json());
 // Routes
 const inventoryRouter = require('./routes/inventory.route.js');
 const itemRouter = require('./routes/item.route.js')
+const userRouter = require('./routes//user.route.js')
 app.use('/inventory', inventoryRouter);
 app.use('/item', itemRouter);
+app.use('/user', userRouter);
 
 
 const connectToMongo = async () => {

@@ -1,5 +1,5 @@
 const Item = require('../models/Item.model.js');
-const Inventory = require('../models/Inventory.model.js');
+
 const { default: mongoose } = require('mongoose');
 
 const findAllItems = async () => await Item.find();
@@ -25,5 +25,14 @@ const deleteItem = async (id) => {
     //     //}
 }
 
+const updateItem = async (id, itemToUpdate) => {
+    try {
+        await Item.findByIdAndUpdate(id, itemToUpdate);
+    } catch (err) {
+        throw { status: 400, msg: err }
+    }
 
-module.exports = { findAllItems, createItem, deleteItem };
+}
+
+
+module.exports = { findAllItems, createItem, deleteItem, updateItem };

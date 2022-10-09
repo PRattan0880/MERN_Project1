@@ -8,6 +8,7 @@ const inventorySchema = new Schema({
     },
     MAX_CAPACITY: Number,
     remaining_capacity: Number,
+    imageURL: String,
     inventory: [{
         item: {
             type: mongoose.Schema.Types.ObjectId,

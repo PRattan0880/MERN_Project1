@@ -2,7 +2,7 @@
 
 const router = require('express').Router();
 const { default: mongoose } = require('mongoose');
-const { findAllInventory, findInventoryById, createInventory, updateInventory, insertToInventory } = require('../controller/inventory.controller.js');
+const { findAllInventory, findInventoryById, createInventory, updateInventory, insertToInventory, removeItemFromInventory, removeItemById, updateItem } = require('../controller/inventory.controller.js');
 const Inventory = require('../models/Inventory.model.js');
 
 const validateObjectId = (req, res, next) => {
@@ -41,11 +41,37 @@ router.post('/', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-
+        console.log('DELETE')
         await removeItemById(req.params.id);
-        res.status(204);
+        res.send(200)
     } catch (err) {
-        res.status(err?.status).json(err);
+        res.status(err?.status ?? 500).json(err);
+    }
+});
+
+router.delete('/:warehouseId/removeItem/:id', validateObjectId, async (req, res) => {
+    try {
+        // console.log(req.params.warehouseId);
+        // console.log(req.params.id);
+        console.log(req.body)
+        await removeItemFromInventory(req.params.warehouseId, req.params.id, req.body);
+        //console.log(res.send())
+        res.status(201).json(req.body)
+    } catch (err) {
+        res.status(err?.status ?? 500).json(err);
+    }
+});
+
+router.put('/updateItem/:id', validateObjectId, async (req, res) => {
+    try {
+        // console.log(req.params.warehouseId);
+        // console.log(req.params.id);
+        console.log(req.params.id)
+        await updateItem(req.params.id, req.body);
+        //console.log(res.send())
+        res.send();
+    } catch (err) {
+        res.status(err?.status ?? 500).json(err);
     }
 });
 

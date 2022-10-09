@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { default: mongoose } = require('mongoose');
-const { findAllItems, createItem, deleteItem } = require('../controller/item.controller.js')
+const { findAllItems, createItem, deleteItem, updateItem } = require('../controller/item.controller.js')
 
 const validateObjectId = (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -33,4 +33,12 @@ router.delete('/:id', validateObjectId, async (req, res) => {
     }
 });
 
+router.put('/:id', validateObjectId, async (req, res) => {
+    try {
+        const inventory = await updateItem(req.params.id, req.body);
+        res.send();
+    } catch (err) {
+        res.status(err?.status ?? 500).json(err);
+    }
+});
 module.exports = router;
