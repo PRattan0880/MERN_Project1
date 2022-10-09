@@ -1,16 +1,33 @@
 import { useNavigate } from 'react-router-dom'
-import { Card, Grid, Image, Text, Badge, Button, Group, Progress } from '@mantine/core';
-import { BsEyeFill, BsFillPencilFill } from "react-icons/bs";
-import { useLocation } from 'react-router-dom';
+import { Card, Grid, Image, Text, Button, Group, Progress } from '@mantine/core';
+import { BsEyeFill } from "react-icons/bs";
 import { DeleteWarehouseForm } from '../Form/index.js';
 import { useState } from 'react';
 import { BsFillTrashFill } from "react-icons/bs";
-import { Modal, useMantineTheme, NativeSelect, Textarea } from '@mantine/core';
 
+
+/**
+ * Component for showing item data in card format with image, name, sku, price, quantity and 2 buttons to edit and delete item
+ * 
+ * @property {string}              warehouse._id                  - MongoDB _id for warehouse document 
+ * @property {number}              warehouse.MAX_CAPACITY         - Max capacity that a warehouse can hold in warehouse document
+ * @property {number}              warehouse.remaining_capacity   - Current remaining capacity in warehouse document
+ * @property {Array.Objects}       inventory                      - array of item documents/objects
+ * @property {string}              warehouse.imageURL             - holds url for image of each item document
+ * @property {Array.Objects}       warehouseList                  - array of warehouse documents/objects
+ * @property {React.Dispatch}      setWarehouseList               - useState setter function used to update state of warehouse list 
+ * 
+ * @returns {React.Component} Rendered card with item info of image, name, sku, price, quantity and 2 buttons to edit and delete item
+ */
 export const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, remaining_capacity, inventory, imageURL }, warehouseList, setWarehouseList }) => {
     const [opened, setOpened] = useState(false);
     const navigate = useNavigate();
-    const handleClick = (inventory, _id) => {
+
+    /**
+     * Use navigate hook to navigate to inventory page with state
+     * @param {string} _id     MongoDB _id for warehouse document 
+     */
+    const handleClick = (_id) => {
         navigate("/inventory", {
             state: {
                 warehouse_id: _id,
@@ -27,7 +44,6 @@ export const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, rem
         setWarehouseList: setWarehouseList
     }
 
-    console.log(props)
     return (
         <>
             <Grid.Col span={4}>
@@ -37,7 +53,6 @@ export const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, rem
                     </Card.Section>
                     <Group position="apart" mt="md" mb="xs">
                         <Text weight={120}>{warehouseNumber}</Text>
-                        {/* <Badge color="pink" variant="light">Quantity: {quantity}</Badge> */}
                     </Group>
 
                     <Text size="sm" color="dimmed">Max Capacity: {MAX_CAPACITY}</Text>
@@ -46,7 +61,7 @@ export const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, rem
 
                     <div className='cards-button-container'>
                         <div className='cards-button'>
-                            <Button onClick={() => handleClick(inventory, _id)} variant="light" color="blue" mt="md" radius="md">
+                            <Button onClick={() => handleClick(_id)} variant="light" color="blue" mt="md" radius="md">
                                 <BsEyeFill />
                             </Button>
                         </div>

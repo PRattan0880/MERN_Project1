@@ -9,6 +9,8 @@ import * as yup from "yup";
 
 
 /**
+ * Component for showing form in modal allowing user to create new warehouse
+ * 
  * @property {React.Dispatch}      setWarehouseList     - useState setter function used to update state of inventory list 
  * @returns Rendered Modal with fields to create new warehouse with feilds warehouse Number, Max Capacity and imageURL.
  */

@@ -4,7 +4,7 @@ export const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/warehouse" element={<WarehouseList />} />
+                <Route path="/" element={<WarehouseList />} />
                 <Route path="/inventory" element={<ItemList />} />
 
             </Routes>
