@@ -7,15 +7,26 @@ const Schema = mongoose.Schema;
  * for document
  */
 const itemSchema = new Schema({
-    sku: Number,
-    name: String,
-    // quantity: Number,
-    category: String,
-    price: Number,
-    imageURL: String
-    //     quantity: Number,
-    //     imageURL: String
-    // }]
+    sku: {
+        type: Number,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    category: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    imageURL: {
+        type: String,
+        required: true
+    },
 }, {
     toJson: { virtual: true },
     toObject: { virtual: true }

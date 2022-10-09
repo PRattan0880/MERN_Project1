@@ -129,7 +129,7 @@ const updateInventoryItem = async (id, itemToUpdate) => {
                     "inventory.$.quantity": itemToUpdate.quantity
 
                 }, "$inc": {
-                    "remaining_capacity": -itemToUpdate.quantity
+                    "remaining_capacity": itemToUpdate.addOrMinus
                 }
             }, { "new": true });
         console.log(inventory)
