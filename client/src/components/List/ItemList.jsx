@@ -41,9 +41,10 @@ export const ItemList = () => {
                         warehouse_id: state.warehouse_id,
                         remaining_capacity: state.remaining_capacity,
                         inventoryList: inventoryList,
-                        setInventoryList: setInventoryList
+                        setInventoryList: setInventoryList,
+                        inventory_id: inventory._id
                     }
-
+                    console.log(props)
                     return <Item key={inventory.item._id} {...props} />
                 })}
             </Grid >

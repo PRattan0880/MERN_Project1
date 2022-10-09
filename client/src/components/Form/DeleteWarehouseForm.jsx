@@ -1,6 +1,5 @@
 import { Modal, useMantineTheme, Text } from '@mantine/core';
 import { Button, Group } from '@mantine/core';
-
 import axios from 'axios';
 
 /**

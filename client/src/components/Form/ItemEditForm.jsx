@@ -26,8 +26,8 @@ import * as yup from "yup";
  * 
  * @returns {React.Component} Rendered Modal with fields to update name, price and quantity of item in inventory
  */
-export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, category, price, imageURL, quantity, warehouse_id, remaining_capacity, setInventoryList }) => {
-
+export const ItemEditForm = ({ editOpened, setEditOpened, _id, inventory_id, name, sku, category, price, imageURL, quantity, warehouse_id, remaining_capacity, inventoryList, setInventoryList }) => {
+    console.log(inventoryList)
     /**
      * Defining a yup schema to be used in order to validate data
      */
@@ -44,7 +44,7 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
         }),
         price: yup.string().matches(/^\d*[\.{1}\d*]\d*$/),
     }).required();
-
+    console.log(inventory_id)
     /**
     * Define useForm hooks to register input data
     */
@@ -82,7 +82,8 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                 imageURL: imageURL
             });
 
-            await axios.put(`http://localhost:9000/inventory/updateItem/${warehouse_id}`, {
+
+            const putRest = await axios.put(`http://localhost:9000/inventory/updateItem/${warehouse_id}`, {
                 item: {
                     _id: _id,
                     name: data.name,
@@ -92,11 +93,14 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                     imageURL: imageURL
                 },
                 quantity: data.quantity,
-                addOrMinus: quantity - data.quantity
+                addOrMinus: quantity - data.quantity,
+                inventory_id: inventory_id
             });
 
+            console.log(putRest)
+
             await axios.get(`http://localhost:9000/inventory/${warehouse_id}`)
-                .then(res => setInventoryList(res.data.inventory))
+                .then(res => { setInventoryList(res.data.inventory); console.log(res.data.inventory) })
                 .catch(err => console.log(err));
 
         } catch (err) {

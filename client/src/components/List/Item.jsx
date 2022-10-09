@@ -20,7 +20,7 @@ import { useState } from 'react';
  * 
  * @returns {React.Component} Rendered card with item info of image, name, sku, price, quantity and 2 buttons to edit and delete item
  */
-export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quantity, warehouse_id, remaining_capacity, inventoryList, setInventoryList }) => {
+export const Item = ({ item: { _id, name, sku, category, price, imageURL }, inventory_id, quantity, warehouse_id, remaining_capacity, inventoryList, setInventoryList }) => {
 
     const [opened, setOpened] = useState(false);
     const [editOpened, setEditOpened] = useState(false);
@@ -45,7 +45,8 @@ export const Item = ({ item: { _id, name, sku, category, price, imageURL }, quan
         warehouse_id: warehouse_id,
         remaining_capacity: remaining_capacity,
         inventoryList: inventoryList,
-        setInventoryList: setInventoryList
+        setInventoryList: setInventoryList,
+        inventory_id: inventory_id
     }
 
     return (

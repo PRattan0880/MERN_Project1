@@ -16,15 +16,16 @@ import axios from 'axios';
  * 
  * @returns {React.Component} Rendered Modal with confirmation to delete and yes/no button to confirm choice.
  */
-export const DeleteItemForm = ({ opened, setOpened, _id, quantity, setInventoryList }) => {
+export const DeleteItemForm = ({ opened, setOpened, _id, quantity, inventoryList, setInventoryList }) => {
 
 
+    console.log(inventoryList)
     const { state } = useLocation();
     const theme = useMantineTheme();
 
     /**
      * Use axios for delete and get request using the item's mongoDB _id
-     * @param {string} _id MongoDB _id for item document 
+     * @param {string} _id  MongoDB _id for item document 
      */
     const handleDelete = async (_id) => {
         setOpened(false);
