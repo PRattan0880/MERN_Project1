@@ -20,7 +20,7 @@ export const ItemList = () => {
      */
     useEffect(() => {
         axios.get(`http://localhost:9000/inventory/${state.warehouse_id}`)
-            .then(res => { setInventoryList(res.data.inventory); setWarehouseList(res.data); console.log(res.data) })
+            .then(res => setInventoryList(res.data.inventory))
             .catch(err => console.error(err));
     }, []);
 
