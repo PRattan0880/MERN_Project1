@@ -2,8 +2,8 @@
 
 const router = require('express').Router();
 const { default: mongoose } = require('mongoose');
-const { findAllInventory, findInventoryById, createInventory, updateInventory, insertToInventory, removeItemFromInventory, removeItemById, updateItem } = require('../controller/inventory.controller.js');
-const Inventory = require('../models/Inventory.model.js');
+const { findAllInventory, findInventoryById, createInventory, updateInventory, insertToInventory, removeItemFromInventory, removeItemById, updateInventoryItem } = require('../controller/inventory.controller.js');
+// const Inventory = require('../models/Inventory.model.js');
 
 /**
  * Middleware function used to validate if passed in id is valid mongoDB objectId
@@ -119,8 +119,8 @@ router.delete('/:warehouseId/removeItem/:id', validateObjectId, async (req, res)
  */
 router.put('/updateItem/:id', validateObjectId, async (req, res) => {
     try {
-        await updateItem(req.params.id, req.body);
-        res.send();
+        const test = await updateInventoryItem(req.params.id, req.body);
+        res.status(200).json(test);
     } catch (err) {
         res.status(err?.status ?? 500).json(err);
     }

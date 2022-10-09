@@ -64,7 +64,7 @@ const updateInventory = async (id, inventoryToUpdate) => {
 
 /**
  * Finds a inventory document based on id and add new item reference to the inventory array
- * @param {string} id                 - MongoDB _id for the inventory document 
+ * @param {string} id                      - MongoDB _id for the inventory document 
  * @param {Object} itemToInsert            - Inventory object containing data of warehouse
  */
 const insertToInventory = async (id, itemToInsert) => {
@@ -116,25 +116,28 @@ const removeItemFromInventory = async (warehouseId, id, data) => {
  * @param {string} id                    - MongoDB _id for the item document 
  * @param {Object} inventoryToUpdate     - Inventory object containing data of warehouse
  */
-const updateItem = async (id, itemToUpdate) => {
+const updateInventoryItem = async (id, itemToUpdate) => {
     try {
         console.log(itemToUpdate)
-        const inventory = await Inventory.findOneAndUpdate({ _id: id },
+        console.log(itemToUpdate.item._id,)
+        const testID = itemToUpdate.inventory_id
+        const inventory = await Inventory.updateOne({
+            'inventory._id': testID
+        },
             {
                 "$set": {
-                    "inventory": {
-                        item: itemToUpdate.item._id,
-                        quantity: itemToUpdate.quantity
-                    },
+                    "inventory.$.quantity": itemToUpdate.quantity
+
                 }, "$inc": {
-                    "remaining_capacity": itemToUpdate.addOrMinus
+                    "remaining_capacity": -itemToUpdate.quantity
                 }
             }, { "new": true });
-        console.log(inventory);
+        console.log(inventory)
+        return inventory;
     } catch (err) {
-        throw { status: 400, msg: err.message }
+        throw { status: 400, msg: err }
     }
 }
 
-module.exports = { findAllInventory, findInventoryById, createInventory, removeItemById, updateInventory, insertToInventory, removeItemFromInventory, updateItem };
+module.exports = { findAllInventory, findInventoryById, createInventory, removeItemById, updateInventory, insertToInventory, removeItemFromInventory, updateInventoryItem };
 

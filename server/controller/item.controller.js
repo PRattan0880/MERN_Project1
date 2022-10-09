@@ -19,7 +19,7 @@ const createItem = async itemToSave => {
         await item.save();
         return item;
     } catch (err) {
-        throw err;
+        throw { status: 400, msg: err.message }
     }
 }
 
@@ -34,11 +34,12 @@ const deleteItem = async (id) => {
 /**
  *  Updates a item document based on id and data provided to update 
  * @param {string} id        - MongoDB _id for the item document 
- * @param {*} itemToUpdate   - Item object containing data of item
+ * @param {Object} itemToUpdate   - Item object containing data of item
  */
 const updateItem = async (id, itemToUpdate) => {
     try {
-        await Item.findByIdAndUpdate(id, itemToUpdate);
+        const test = await Item.findByIdAndUpdate(id, itemToUpdate);
+        console.log(id)
     } catch (err) {
         throw { status: 400, msg: err }
     }

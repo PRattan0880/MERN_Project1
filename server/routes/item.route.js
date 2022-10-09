@@ -41,6 +41,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const item = await createItem(req.body);
+        console.log(item)
         res.status(201).json(item);
     } catch (err) {
         res.status(err?.status ?? 500).json(err);

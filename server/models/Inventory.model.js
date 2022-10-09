@@ -9,32 +9,26 @@ const inventorySchema = new Schema({
     warehouseNumber: {
         type: Number,
         unique: true
-    },
-    MAX_CAPACITY: {
-        type: Number,
-        required: true
-    },
-    remaining_capacity: {
-        type: Number,
-        required: true
-    },
-    imageURL: {
-        type: String,
-        required: true
-    },
+    }, MAX_CAPACITY: Number,
+    remaining_capacity: Number,
     inventory: [{
         item: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Item',
-            required: true
+            // _id: false
         },
-        quantity: {
-            type: Number,
-            required: true
-        }
+        quantity: Number
     }]
-});
+    // inventory: {
+    //     items: [
+    //         {
+    //             item: { type: mongoose.Schema.Types.ObjectId, ref: 'Item' },
+    //             quantity: Number
+    //         }
+    //     ],
+    // }
 
+});
 const Inventory = mongoose.model('Inventory', inventorySchema, 'Inventory');
 
 module.exports = Inventory;

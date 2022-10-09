@@ -7,32 +7,19 @@ const Schema = mongoose.Schema;
  * for document
  */
 const itemSchema = new Schema({
-    sku: {
-        type: Number,
-        required: true,
-        unique: true
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    category: {
-        type: String,
-        required: true,
-    },
-    price: {
-        type: Number,
-        required: true,
-    },
-    imageURL: {
-        type: String,
-        required: true,
-    }
+    sku: Number,
+    name: String,
+    // quantity: Number,
+    category: String,
+    price: Number,
+    imageURL: String
+    //     quantity: Number,
+    //     imageURL: String
+    // }]
 }, {
     toJson: { virtual: true },
     toObject: { virtual: true }
 });
-
 const Item = mongoose.model('Item', itemSchema, 'Item');
 
 module.exports = Item;
