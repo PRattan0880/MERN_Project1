@@ -1,21 +1,36 @@
-import { Modal, useMantineTheme, NativeSelect, Textarea, Center } from '@mantine/core';
+import { Modal, useMantineTheme, NativeSelect } from '@mantine/core';
 import { TextInput, Button, Group, NumberInput } from '@mantine/core';
-import { useState } from 'react';
-import { IconCpu, IconCurrencyDollar, IconCirclePlus } from '@tabler/icons';
+import { IconCpu, IconCurrencyDollar } from '@tabler/icons';
 import axios from 'axios';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import Form from 'react-bootstrap/Form';
 
 
 /**
+ * Component for showing form in modal allowing user to edit item data and update the item state in 
+ * order to rerender the component
  * 
- * @param {*} param0 
- * @returns 
+ * @property {boolean}             editOpened           - Hold bolean value of modal opened
+ * @property {React.Dispatch}      setEditOpened        - useState setter function used to update state of opened
+ * @property {string}              _id                  - MongoDB _id for item document 
+ * @property {string}              name                 - name of the item document 
+ * @property {string}              sku                  - unique sku number of item document
+ * @property {string}              category             - Category of item document
+ * @property {number}              price                - Current price of given item document
+ * @property {string}              imageURL             - holds url for image of each item document
+ * @property {number}              quantity             - Current quantity of given item in inventory
+ * @property {string}              warehouse_id         - MongoDB _id for warehouse document
+ * @property {number}              remaining_capacity   - Current remaining capacity in warehouse document
+ * @property {React.Dispatch}      setInventoryList     - useState setter function used to update state of inventory list 
+ * 
+ * @returns {React.Component} Rendered Modal with fields to update name, price and quantity of item in inventory
  */
-export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, category, price, imageURL, quantity, warehouse_id, remaining_capacity, inventoryList, setInventoryList }) => {
+export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, category, price, imageURL, quantity, warehouse_id, remaining_capacity, setInventoryList }) => {
 
+    /**
+     * Defining a yup schema to be used in order to validate data
+     */
     const schema = yup.object({
         name: yup.string().required('Product name is required'),
         quantity: yup.number().test("is-threshold-valid", "${path} threshold invalid", function (quantity) {
@@ -27,11 +42,9 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                 return quantity;
             }
         }),
-        // quantity: yup.number().positive().integer().required(),
         price: yup.string().matches(/^\d*[\.{1}\d*]\d*$/),
     }).required();
 
-    // console.log(MAX_CAPACITY);
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
@@ -50,14 +63,15 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
     }
     ];
 
+    /**
+     * Use axios for PUT and GET request using the warehouse's and item mongoDB _id
+     * @param {Object} Object containing the input data for name, quantity, price, imageURL, and SKU 
+     */
     const onSubmit = async (data) => {
         setEditOpened(false);
-        console.log(data)
-        console.log(quantity)
-
         try {
 
-            const res = await axios.put(`http://localhost:9000/item/${_id}`, {
+            await axios.put(`http://localhost:9000/item/${_id}`, {
                 name: data.name,
                 sku: data.sku,
                 category: data.category,
@@ -65,7 +79,7 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                 imageURL: imageURL
             });
 
-            const putRes = await axios.put(`http://localhost:9000/inventory/updateItem/${warehouse_id}`, {
+            await axios.put(`http://localhost:9000/inventory/updateItem/${warehouse_id}`, {
                 item: {
                     _id: _id,
                     name: data.name,
@@ -78,18 +92,15 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                 addOrMinus: quantity - data.quantity
             });
 
-            console.log(_id)
             await axios.get(`http://localhost:9000/inventory/${warehouse_id}`)
-                .then(res => { setInventoryList(res.data.inventory); console.log(res.data) })
-                .catch(err => console.error(err));
+                .then(res => setInventoryList(res.data.inventory))
+                .catch(err => console.log(err));
 
-            console.log(putRes.data)
         } catch (err) {
             console.log(err);
         }
     }
 
-    console.log(remaining_capacity)
     return (
 
         <>
@@ -112,7 +123,6 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                             withAsterisk
                             label="SKU"
                             placeholder="84894189"
-                            // error={!!errors.sku}
                             {...register("sku", { value: sku })}
                             size="sm"
                             disabled
@@ -135,7 +145,6 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                             data={options}
                             icon={<IconCpu size={14} />}
                             {...register("category", { value: category })}
-                            // error={!!errors.category}
                             size="sm"
                             disabled
                         />
@@ -157,7 +166,6 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
                     </Group>
                 </form>
             </Modal>
-            {/* <button onClick={() => setOpened(!opened)}>Test</button> */}
         </>
     );
 
