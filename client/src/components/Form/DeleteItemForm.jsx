@@ -10,7 +10,7 @@ import axios from 'axios';
  * 
  * @property {boolean}             opened               - Hold bolean value of modal opened
  * @property {React.Dispatch}      setOpened            - useState setter function used to update state of opened
- * @property {string}              _id                  - MongoDB _id for item object 
+ * @property {string}              _id                  - MongoDB _id for item document 
  * @property {number}              quantity             - Current quantity of given item in inventory
  * @property {React.Dispatch}      setInventoryList     - useState setter function used to update state of inventory list 
  * 
@@ -24,7 +24,7 @@ export const DeleteItemForm = ({ opened, setOpened, _id, quantity, setInventoryL
 
     /**
      * Use axios for delete and get request using the item's mongoDB _id
-     * @param {string} _id MongoDB _id for item object 
+     * @param {string} _id MongoDB _id for item document 
      */
     const handleDelete = async (_id) => {
         setOpened(false);
