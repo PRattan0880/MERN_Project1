@@ -56,7 +56,7 @@ router.get('/:id', validateObjectId, async (req, res) => {
  * @param {anonymous}       - Callback function used to create inventory
  * 
  * @callback anonymous 
- * @param {Object} req      - Requset object containing data regarding response
+ * @param {Object} req      - Request object containing data regarding response
  * @param {Object} res      - Response object containing data regarding response
  */
 router.post('/', async (req, res) => {
@@ -76,7 +76,7 @@ router.post('/', async (req, res) => {
  * @param {Function}  validateObjectId      - Middleware function used for validation
  * 
  * @callback anonymous 
- * @param {Object} req      - Requset object containing data regarding response
+ * @param {Object} req      - Request object containing data regarding response
  * @param {Object} res      - Response object containing data regarding response
  */
 router.delete('/:id', async (req, res) => {
@@ -95,7 +95,7 @@ router.delete('/:id', async (req, res) => {
  * @param {Function}  validateObjectId      - Middleware function used for validation
  * 
  * @callback anonymous 
- * @param {Object} req      - Requset object containing data regarding response
+ * @param {Object} req      - Request object containing data regarding response
  * @param {Object} res      - Response object containing data regarding response
  */
 router.delete('/:warehouseId/removeItem/:id', validateObjectId, async (req, res) => {
@@ -114,7 +114,7 @@ router.delete('/:warehouseId/removeItem/:id', validateObjectId, async (req, res)
  * @param {Function}  validateObjectId      - Middleware function used for validation
  * 
  * @callback anonymous 
- * @param {Object} req      - Requset object containing data regarding response
+ * @param {Object} req      - Request object containing data regarding response
  * @param {Object} res      - Response object containing data regarding response
  */
 router.put('/updateItem/:id', validateObjectId, async (req, res) => {
@@ -133,7 +133,7 @@ router.put('/updateItem/:id', validateObjectId, async (req, res) => {
  * @param {Function}  validateObjectId      - Middleware function used for validation
  * 
  * @callback anonymous 
- * @param {Object} req      - Requset object containing data regarding response
+ * @param {Object} req      - Request object containing data regarding response
  * @param {Object} res      - Response object containing data regarding response
  */
 router.put('/:id', validateObjectId, async (req, res) => {
@@ -152,7 +152,7 @@ router.put('/:id', validateObjectId, async (req, res) => {
  * @param {Function}  validateObjectId      - Middleware function used for validation
  * 
  * @callback anonymous 
- * @param {Object} req      - Requset object containing data regarding response
+ * @param {Object} req      - Request object containing data regarding response
  * @param {Object} res      - Response object containing data regarding response
  */
 router.put('/addItem/:id', validateObjectId, async (req, res) => {
