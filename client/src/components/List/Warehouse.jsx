@@ -44,6 +44,7 @@ export const Warehouse = ({ warehouse: { _id, warehouseNumber, MAX_CAPACITY, rem
         setWarehouseList: setWarehouseList
     }
 
+    console.log(imageURL)
     return (
         <>
             <Grid.Col span={4}>

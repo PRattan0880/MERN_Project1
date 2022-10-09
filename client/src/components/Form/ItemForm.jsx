@@ -26,6 +26,11 @@ export const ItemForm = ({ warehouse: { _id, remaining_capacity }, setInventoryL
         name: yup.string().required('Product name is required'),
         sku: yup.string().required('Product sku is required'),
         quantity: yup.number().test("is-threshold-valid", "${path} threshold invalid", function (quantity) {
+            if (quantity <= 0) {
+                return this.createError({
+                    message: "Must be positive"
+                })
+            }
             if (remaining_capacity - quantity < 0) {
                 return this.createError({
                     message: "Not Enough Capacity in Warehouse"

@@ -34,6 +34,11 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, inventory_id, nam
     const schema = yup.object({
         name: yup.string().required('Product name is required'),
         quantity: yup.number().test("is-threshold-valid", "${path} threshold invalid", function (quantity) {
+            if (quantity <= 0) {
+                return this.createError({
+                    message: "Must be positive"
+                })
+            }
             if (remaining_capacity - quantity < 0) {
                 return this.createError({
                     message: "Not Enough Capacity in Warehouse"
@@ -44,7 +49,7 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, inventory_id, nam
         }),
         price: yup.string().matches(/^\d*[\.{1}\d*]\d*$/),
     }).required();
-    console.log(inventory_id)
+
     /**
     * Define useForm hooks to register input data
     */
