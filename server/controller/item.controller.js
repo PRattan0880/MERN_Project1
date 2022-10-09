@@ -2,8 +2,17 @@ const Item = require('../models/Item.model.js');
 
 const { default: mongoose } = require('mongoose');
 
+/**
+ * Find all item documents item collection
+ * @returns list of documents that are found in the item collection
+ */
 const findAllItems = async () => await Item.find();
 
+/**
+ * Creates and adds new item document to the item collection
+ * @param {Object} itemToSave       - Item object containing data of item
+ * @returns an object representation of item document
+ */
 const createItem = async itemToSave => {
     try {
         const item = new Item(itemToSave);
@@ -14,17 +23,19 @@ const createItem = async itemToSave => {
     }
 }
 
+/**
+ * Find document based on id in item collection and delete it
+ * @param {string} id       - MongoDB _id for the item document 
+ */
 const deleteItem = async (id) => {
-    // const deleteItem = await Item.findByIdAndDelete(id);
-    //console.log(deleteItem);
-    //if (deleteItem) {
-    const test = await Item.findByIdAndDelete(id);
-    // console.log(test)
-    //     //const test = await Inventory.deleteOne({ "items._id": mongoose.Types.ObjectId(id) });
-    //     console.log(test);
-    //     //}
+    await Item.findByIdAndDelete(id);
 }
 
+/**
+ *  Updates a item document based on id and data provided to update 
+ * @param {string} id        - MongoDB _id for the item document 
+ * @param {*} itemToUpdate   - Item object containing data of item
+ */
 const updateItem = async (id, itemToUpdate) => {
     try {
         await Item.findByIdAndUpdate(id, itemToUpdate);
