@@ -45,6 +45,9 @@ export const ItemEditForm = ({ editOpened, setEditOpened, _id, name, sku, catego
         price: yup.string().matches(/^\d*[\.{1}\d*]\d*$/),
     }).required();
 
+    /**
+    * Define useForm hooks to register input data
+    */
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });

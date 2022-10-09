@@ -6,18 +6,26 @@ import axios from 'axios';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import Form from 'react-bootstrap/Form';
 
 
+/**
+ * Component for showing form in modal allowing user to create new item  and insert the item in to inventory
+ * 
+ * @property {string}              warehouse._id                  - MongoDB _id for warehouse document 
+ * @property {number}              warehouse.remaining_capacity   - Current remaining capacity in warehouse document
+ * @property {React.Dispatch}      setInventoryList               - useState setter function used to update state of inventory list 
+ * 
+ * @returns {React.Component} Rendered Modal with fields to create new item with feilds name, price, quantity, sku and imageURL.
+ */
+export const ItemForm = ({ warehouse: { _id, remaining_capacity }, setInventoryList }) => {
 
-export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, inventory }, inventoryList, setInventoryList }) => {
-
+    /**
+     * Defining a yup schema to be used in order to validate data
+     */
     const schema = yup.object({
         name: yup.string().required('Product name is required'),
         sku: yup.string().required('Product sku is required'),
         quantity: yup.number().test("is-threshold-valid", "${path} threshold invalid", function (quantity) {
-            console.log(quantity)
-            // const isInRange = 0;
             if (remaining_capacity - quantity < 0) {
                 return this.createError({
                     message: "Not Enough Capacity in Warehouse"
@@ -26,13 +34,14 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
                 return quantity;
             }
         }),
-        // quantity: yup.number().positive().integer().required(),
         price: yup.string().matches(/^\d*[\.{1}\d*]\d*$/),
         category: yup.string().matches(/(GPU|CPU|Motherboard)/).required(),
         imageUrl: yup.string().url().required()
     }).required();
 
-    // console.log(MAX_CAPACITY);
+    /**
+     * Define useForm hooks to register input data
+     */
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
@@ -52,10 +61,12 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
     }
     ];
 
+    /**
+     * Use axios for PUT and GET request using the warehouse's and item mongoDB _id
+     * @param {Object} Object containing the input data for name, quantity, price, imageURL, and SKU 
+     */
     const onSubmit = async (data) => {
         setOpened(false);
-        console.log(data)
-
         try {
             const res = await axios.post('http://localhost:9000/item', {
                 name: data.name,
@@ -64,8 +75,8 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
                 price: data.price,
                 imageURL: data.imageUrl
             });
-            console.log(res.data._id);
-            const putRest = await axios.put(`http://localhost:9000/inventory/addItem/${_id}`, {
+
+            await axios.put(`http://localhost:9000/inventory/addItem/${_id}`, {
 
                 item: {
                     _id: res.data._id,
@@ -75,10 +86,8 @@ export const ItemForm = ({ warehouse: { _id, MAX_CAPACITY, remaining_capacity, i
             });
 
             await axios.get(`http://localhost:9000/inventory/${_id}`)
-                .then(res => { setInventoryList(res.data.inventory); console.log(res.data) })
+                .then(res => setInventoryList(res.data.inventory))
                 .catch(err => console.error(err));
-
-            console.log(putRest.data);
         } catch (err) {
             console.log(err);
         }
