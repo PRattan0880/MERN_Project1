@@ -1,21 +1,30 @@
-import { Modal, useMantineTheme, NativeSelect, Textarea, Center } from '@mantine/core';
-import { TextInput, Button, Group, NumberInput } from '@mantine/core';
+import { Modal, useMantineTheme, Textarea, Center } from '@mantine/core';
+import { TextInput, Button, Group } from '@mantine/core';
 import { useState } from 'react';
-import { IconCpu, IconCurrencyDollar, IconCirclePlus, IconHash } from '@tabler/icons';
+import { IconCirclePlus } from '@tabler/icons';
 import axios from 'axios';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import Form from 'react-bootstrap/Form';
 
 
-export const WarehouseForm = ({ warehouseList, setWarehouseList }) => {
+/**
+ * @property {React.Dispatch}      setWarehouseList     - useState setter function used to update state of inventory list 
+ * @returns Rendered Modal with fields to create new warehouse with feilds warehouse Number, Max Capacity and imageURL.
+ */
+export const WarehouseForm = ({ setWarehouseList }) => {
+    /**
+     * Defining a yup schema to be used in order to validate data
+     */
     const schema = yup.object({
         warehouseNumber: yup.number().positive().required(),
         max_capacity: yup.number().positive().required(),
         imageUrl: yup.string().url().required()
     }).required();
 
+    /**
+     * Define useForm hooks to register input data
+     */
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
@@ -23,11 +32,14 @@ export const WarehouseForm = ({ warehouseList, setWarehouseList }) => {
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
 
+    /**
+     * Use axios for PUT and GET request using the warehouse's and item mongoDB _id
+     * @param {Object} Object containing the input data for name, quantity, price, imageURL, and SKU 
+     */
     const onSubmit = async (data) => {
         setOpened(false);
-        console.log(data)
         try {
-            const res = await axios.post('http://localhost:9000/inventory', {
+            await axios.post('http://localhost:9000/inventory', {
                 warehouseNumber: data.warehouseNumber,
                 MAX_CAPACITY: data.max_capacity,
                 remaining_capacity: data.max_capacity,
@@ -36,9 +48,8 @@ export const WarehouseForm = ({ warehouseList, setWarehouseList }) => {
             });
 
             axios.get('http://localhost:9000/inventory')
-                .then(res => { setWarehouseList(res.data); console.log(res.data) })
+                .then(res => setWarehouseList(res.data))
                 .catch(err => console.error(err));
-            console.log(res)
         } catch (err) {
             console.log(err);
         }
