@@ -1,31 +1,42 @@
-import { Modal, useMantineTheme, NativeSelect, Textarea, Text } from '@mantine/core';
-import { TextInput, Button, Group, NumberInput } from '@mantine/core';
-import { openConfirmModal } from '@mantine/modals';
+import { Modal, useMantineTheme, Text } from '@mantine/core';
+import { Button, Group } from '@mantine/core';
 import { useLocation } from 'react-router-dom';
-import { useState } from 'react';
-import { IconCpu, IconCurrencyDollar } from '@tabler/icons';
 import axios from 'axios';
-import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
-import Form from 'react-bootstrap/Form';
 
-export const DeleteItemForm = ({ opened, setOpened, _id, quantity, inventoryList, setInventoryList }) => {
+
+/**
+ * Component for showing deletion confirmation modal and update the inventory state in 
+ * order to rerender the component
+ * 
+ * @property {boolean}             opened               - Hold bolean value of modal opened
+ * @property {React.Dispatch}      setOpened            - useState setter function used to update state of opened
+ * @property {string}              _id                  - MongoDB _id for item object 
+ * @property {number}              quantity             - Current quantity of given item in inventory
+ * @property {React.Dispatch}      setInventoryList     - useState setter function used to update state of inventory list 
+ * 
+ * @returns {React.Component} Rendered Modal with confirmation to delete and yes/no button to confirm choice.
+ */
+export const DeleteItemForm = ({ opened, setOpened, _id, quantity, setInventoryList }) => {
 
 
     const { state } = useLocation();
     const theme = useMantineTheme();
+
+    /**
+     * Use axios for delete and get request using the item's mongoDB _id
+     * @param {string} _id MongoDB _id for item object 
+     */
     const handleDelete = async (_id) => {
         setOpened(false);
         try {
-            const putRest = await axios.delete(`http://localhost:9000/inventory/${state.warehouse_id}/removeItem/${_id}`, {
+            await axios.delete(`http://localhost:9000/inventory/${state.warehouse_id}/removeItem/${_id}`, {
                 data: {
                     quantity: quantity
                 }
             });
 
             await axios.get(`http://localhost:9000/inventory/${state.warehouse_id}`)
-                .then(res => { setInventoryList(res.data.inventory); console.log(res.data) })
+                .then(res => setInventoryList(res.data.inventory))
                 .catch(err => console.error(err));
 
         } catch (err) {
